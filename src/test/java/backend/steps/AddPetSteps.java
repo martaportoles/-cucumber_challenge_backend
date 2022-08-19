@@ -1,5 +1,11 @@
 package backend.steps;
 
+
+// TODO: Duda, no aparecía a en el pom.xml
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.Assert;
+
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.http.ContentType;
@@ -10,13 +16,28 @@ import static io.restassured.RestAssured.given;
 
 public class AddPetSteps {
 
+    /*
+        API is not working properly, new pets seems to be added, but although that is ok,
+        all pets are created with the same id, so it is impossible to search by its ID later.
+
+        Because of that, testing uploading data have to be done with already known
+        pets and work with that.
+
+        Other way is searching unused IDs and use it to keep database safe with our interactions
+    */
+
     private String petName;
     private String petStatus;
+    private ExtractableResponse<Response> response;
 
 
     @When("the user adds a new pet with {string}, {string} and {string}")
     public void theUserAddsANewPetWithNamePetAndStatus(String name, String category, String status) {
-        System.out.println("Adding new pet to the store" + name + category + status);
+        response = given().contentType(ContentType.JSON)
+                .body(makePet(name, category, status))
+                .when().post("https://petstore.swagger.io/v2/pet")
+                .then().statusCode(200)
+                .extract();
 
         petName = given().contentType(ContentType.JSON)
                     .body(makePet(name, category, status))
@@ -24,12 +45,12 @@ public class AddPetSteps {
                     .then().statusCode(200)
                     .extract().path("name");
 
-        System.out.println(petName);
     }
 
     @Then("the pet {string} exist")
     public void thePetNameExist(String name) {
-        System.out.println("Asserting pet has been added");
+
+        Assert.assertTrue(petName.equals(name));
     }
 
     private String makePet(String name, String category, String status) {

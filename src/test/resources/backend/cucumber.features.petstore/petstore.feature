@@ -6,7 +6,7 @@ Feature: Selling a Pet
     Examples:
       | Name      | Pet   | Status   |
       | "Ralf"    |"Dog"  | "Available"|
-#      | "Cati"       |"Cat"    |"Available"|
+
 
 
 #    When the user adds a new pet with <Name>, <Pet> and <Status>
@@ -30,7 +30,8 @@ Feature: Selling a Pet
 #
 #  Scenario: User gets available pets
 #    Given there is a pet named "scruffy" type "dog" status "available"
-#    Then there are "available" pets
+#    When the user retrieves the "available" pets
+#    Then the result is not empty
 
 
 
