@@ -1,12 +1,27 @@
 Feature: Selling a Pet
 
   Scenario Outline: User adds a pet
-    When the user adds a new pet with <Name>, <Pet> and <Status>
+    When the user adds a new pet with <Id>, <Name>, <Pet> and <Status>
     Then the pet <Name> exist
     Examples:
-      | Name      | Pet   | Status   |
-      | "Ralf"    |"Dog"  | "Available"|
+      | Id    | Name      | Pet   | Status      |
+      | 666   |"Ralf"    |"Dog"  | "available"  |
 
+  Scenario: User updates a pet
+    When the user updates the pet with id "666" status to "sold"
+    Then the response is the updated id "666"
+
+  Scenario: User deletes a pet
+    When the user deletes the pet with id "666"
+    Then the pet with id "666" do not exists
+
+  Scenario Outline: User gets available pets
+    When there are pets with <status>
+    Then the result is not empty
+    And all results have the same property value <status>
+    Examples:
+      | status      |
+      | "available" |
 
 
 #    When the user adds a new pet with <Name>, <Pet> and <Status>
@@ -16,28 +31,3 @@ Feature: Selling a Pet
 #
 #    When the user gets all pets with "available" status
 #    Then the pet status is {string}
-
-
-#  Scenario: User updates a pet
-#    Given there is a pet named "scruffy" type "dog" status "available"
-#    When the user updates the pet "scruffy" status to "sold"
-#    Then the pet "scruffy" status is "sold"
-#
-#  Scenario: User deletes a pet
-#    Given there is a pet named "scruffy" type "dog" status "available"
-#    When the user deletes the pet "scruffy"
-#    Then the pet "scruffy" do not exists
-#
-#  Scenario: User gets available pets
-#    Given there is a pet named "scruffy" type "dog" status "available"
-#    When the user retrieves the "available" pets
-#    Then the result is not empty
-
-
-
-
-
-
-
-
-
