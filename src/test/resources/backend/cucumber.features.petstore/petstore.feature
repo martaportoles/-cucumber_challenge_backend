@@ -6,15 +6,15 @@ Feature: Selling a Pet
     And the pet exists at database with ID <Id>
     Examples:
       | Id    | Name      | Pet   | Status      |
-      | "666"   |"Ralf"    |"Dog"  | "available"  |
+      | 666   |"Ralf"    |"Dog"  | "available"  |
 
   Scenario: User updates a pet
-    When the user updates the pet with id "666" status to "sold"
-    Then the response is the updated id "666"
+    When the user updates the pet with id 666 status to "sold"
+    Then the response is the updated id 666
 
   Scenario: User deletes a pet
-    When the user deletes the pet with id "666"
-    Then the pet with id "666" do not exists
+    When the user deletes the pet with id 666
+    Then the pet with id 666 do not exists
 
   Scenario Outline: User gets available pets
     When there are pets with <status>

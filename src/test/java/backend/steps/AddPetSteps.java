@@ -1,8 +1,6 @@
 package backend.steps;
 
 
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.restassured.response.Response;
 // TODO: Question, this library did not appear on pom at the beginning
 import org.junit.Assert;
@@ -34,8 +32,8 @@ public class AddPetSteps {
     public static Response response;
     public static String jsonAsString;
 
-    @When("the user adds a new pet with {string}, {string}, {string} and {string}")
-    public void theUserAddsANewPetWithNamePetAndStatus(String id, String name, String category, String status) {
+    @When("the user adds a new pet with {int}, {string}, {string} and {string}")
+    public void theUserAddsANewPetWithNamePetAndStatus(Integer id, String name, String category, String status) {
         response = given().contentType(ContentType.JSON)
                 .body(makePet(id, name, category, status))
                 .when().post("https://petstore.swagger.io/v2/pet")
@@ -49,16 +47,16 @@ public class AddPetSteps {
         Assert.assertTrue(name.equals(response.path("name")));
     }
 
-    @Then("the pet exists at database with ID {string}")
-    public void the_pet_exists_at_database_with(String id) {
+    @Then("the pet exists at database with ID {int}")
+    public void the_pet_exists_at_database_with(Integer id) {
         response = getPetById(id);
 
         Assert.assertEquals(200, response.statusCode());
         Assert.assertEquals(id, response.path("id"));
     }
 
-    @When("the user updates the pet with id {string} status to {string}")
-    public void theUserUpdatesThePetWithIdStatusTo(String id, String status) {
+    @When("the user updates the pet with id {int} status to {string}")
+    public void theUserUpdatesThePetWithIdStatusTo(Integer id, String status) {
         response = given()
                 .contentType(ContentType.URLENC)
                 .body("status=" + status)
@@ -68,14 +66,14 @@ public class AddPetSteps {
         jsonAsString = response.asString();
     }
 
-    @Then("the response is the updated id {string}")
-    public void the_pet_status_is(String id) {
-        Assert.assertEquals(id, response.path("message"));
+    @Then("the response is the updated id {int}")
+    public void the_pet_status_is(Integer id) {
+        Assert.assertEquals(Integer.toString(id), response.path("message"));
     }
 
     /************** BEGIN DELETE SCENARIO ********************/
-    @When("the user deletes the pet with id {string}")
-    public void the_user_deletes_the_pet_with_id(String id) {
+    @When("the user deletes the pet with id {int}")
+    public void the_user_deletes_the_pet_with_id(Integer id) {
         response = given()
                 .contentType(ContentType.JSON)
                 .when().delete("https://petstore.swagger.io/v2/pet/" + id)
@@ -83,10 +81,10 @@ public class AddPetSteps {
                 .extract().response();
         jsonAsString = response.asString();
     }
-    @Then("the pet with id {string} do not exists")
-    public void the_pet_with_id_do_not_exists(String id) {
+    @Then("the pet with id {int} do not exists")
+    public void the_pet_with_id_do_not_exists(Integer id) {
         // Write code here that turns the phrase above into concrete actions
-        Assert.assertEquals(id, response.path("message"));
+        Assert.assertEquals(Integer.toString(id), response.path("message"));
 
         response = getPetById(id);
 
@@ -122,7 +120,7 @@ public class AddPetSteps {
         }
     }
 
-    private String makePet(String id, String name, String category, String status) {
+    private String makePet(Integer id, String name, String category, String status) {
         String categoryId = String.valueOf(Math.abs(new Random().nextInt()));
         return String.format(
                 "{\n" +
@@ -144,7 +142,7 @@ public class AddPetSteps {
         );
     }
 
-    private Response getPetById(String id) {
+    private Response getPetById(Integer id) {
         return given()
                 .contentType(ContentType.JSON)
                 .when().get("https://petstore.swagger.io/v2/pet/" + id)
