@@ -3,9 +3,10 @@ Feature: Selling a Pet
   Scenario Outline: User adds a pet
     When the user adds a new pet with <Id>, <Name>, <Pet> and <Status>
     Then the pet <Name> exist
+    And the pet exists at database with ID <Id>
     Examples:
       | Id    | Name      | Pet   | Status      |
-      | 666   |"Ralf"    |"Dog"  | "available"  |
+      | "666"   |"Ralf"    |"Dog"  | "available"  |
 
   Scenario: User updates a pet
     When the user updates the pet with id "666" status to "sold"
